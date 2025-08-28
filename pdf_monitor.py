@@ -13,6 +13,7 @@ STATE_PATH = os.getenv("STATE_PATH", "last_pdf_links.json")
 # Pushover keys will be injected via GitHub Secrets
 PUSHOVER_USER_KEY = os.getenv("PUSHOVER_USER_KEY")
 PUSHOVER_APP_TOKEN = os.getenv("PUSHOVER_APP_TOKEN")
+WEBSITE_URL = os.getenv("WEBSITE_URL")
 
 HTTP_HEADERS = {
     "User-Agent": "Mozilla/5.0 (compatible; Lingen-PDF-Monitor/1.0; +github-actions)"
@@ -91,4 +92,5 @@ def main():
 
 
 if __name__ == "__main__":
+
     main()
