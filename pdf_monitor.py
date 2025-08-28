@@ -100,15 +100,14 @@ def main():
     new = current - old
 
     if new:
-        # Keep logs minimal (avoid printing full URLs if repo is public)
-        send_push("Neue PDFs entdeckt! (" + str(len(new)) + ")")
-        # If you *want* the URLs in the push, replace the line above with:
-        # send_push("Neue PDFs:\n" + "\n".join(sorted(new)))
+        msg = "Neue PDFs entdeckt:\n" + "\n".join(sorted(new))
+        send_push(msg)
         save_links(current)
-        print("New PDFs detected:", len(new))
+        print("New PDFs detected:", *sorted(new), sep="\n- ")
     else:
         print("No new PDFs.")
 
 
 if __name__ == "__main__":
     main()
+
