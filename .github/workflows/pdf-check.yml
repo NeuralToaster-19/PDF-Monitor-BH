@@ -2,11 +2,8 @@ name: PDF Monitor
 
 on:
   schedule:
-    # GitHub runs on UTC. Your timezone is Europe/London.
-    # Summer (BST, UTC+1): 07:30–17:00 → 06:30–16:00 UTC
-    - cron: "*/1 6-18 * * 1-5"
-    # Winter (GMT, UTC+0): 07:30–17:00 → 07:30–17:00 UTC
-    - cron: "*/1 7-19 * * 1-5"
+      - cron: "* * * * *"   # every minute
+
   workflow_dispatch:  # allow manual run
 
 jobs:
