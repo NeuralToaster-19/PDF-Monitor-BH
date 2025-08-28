@@ -29,4 +29,5 @@ jobs:
         env:
           PUSHOVER_USER_KEY: ${{ secrets.PUSHOVER_USER_KEY }}
           PUSHOVER_APP_TOKEN: ${{ secrets.PUSHOVER_APP_TOKEN }}
+          WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
         run: python pdf_monitor.py
