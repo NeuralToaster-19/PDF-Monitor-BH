@@ -2,11 +2,8 @@ name: PDF Monitor
 
 on:
   schedule:
-    # GitHub runs on UTC time
-    # Summer (CEST = UTC+2): 07:30–16:00 local → 05:30–14:00 UTC
-    - cron: "*/1 5-19 * * 1-5"
-    # Winter (CET = UTC+1): 07:30–16:00 local → 06:30–15:00 UTC
-    - cron: "*/1 6-19 * * 1-5"
+    - cron: "* * * * *"   # every minute (UTC)
+    
   workflow_dispatch: {}   # allows manual run from the Actions tab
 
 jobs:
@@ -37,5 +34,17 @@ jobs:
           PUSHOVER_USER_KEY: ${{ secrets.PUSHOVER_USER_KEY }}
           PUSHOVER_APP_TOKEN: ${{ secrets.PUSHOVER_APP_TOKEN }}
           WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
-
+          STATE_PATH: state/last_pdf_links.json
         run: python pdf_monitor.py
+
+      - name: Commit state if changed
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "Update state [skip ci]"
+            git push
+          else
+            echo "No changes to commit."
+          fi
