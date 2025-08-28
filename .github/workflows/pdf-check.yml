@@ -2,12 +2,12 @@ name: PDF Monitor
 
 on:
   schedule:
-    # GitHub uses UTC time
-    # Summer (CEST): 07:30–16:00 in Prague = 05:30–14:00 UTC
-    - cron: "*/1 5-14 * * 1-5"
-    # Winter (CET): 07:30–16:00 in Prague = 06:30–15:00 UTC
-    - cron: "*/1 6-15 * * 1-5"
-  workflow_dispatch: # allow manual run
+    # GitHub runs on UTC. Your timezone is Europe/London.
+    # Summer (BST, UTC+1): 07:30–16:00 → 06:30–15:00 UTC
+    - cron: "*/5 6-15 * * 1-5"
+    # Winter (GMT, UTC+0): 07:30–16:00 → 07:30–16:00 UTC
+    - cron: "*/5 7-16 * * 1-5"
+  workflow_dispatch:  # allow manual run
 
 jobs:
   check:
@@ -23,7 +23,8 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install requests beautifulsoup4; fi
 
       - name: Run monitor script
         env:
