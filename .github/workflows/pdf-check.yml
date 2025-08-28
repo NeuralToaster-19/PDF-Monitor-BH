@@ -2,13 +2,18 @@ name: PDF Monitor
 
 on:
   schedule:
-      - cron: "* * * * *"   # every minute
-
-  workflow_dispatch:  # allow manual run
+    # GitHub runs on UTC time
+    # Summer (CEST = UTC+2): 07:30–16:00 local → 05:30–14:00 UTC
+    - cron: "*/5 5-19 * * 1-5"
+    # Winter (CET = UTC+1): 07:30–16:00 local → 06:30–15:00 UTC
+    - cron: "*/5 6-19 * * 1-5"
+  workflow_dispatch: {}   # allows manual run from the Actions tab
 
 jobs:
   check:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write   # needed so we can commit the state file
 
     steps:
       - name: Checkout repo
@@ -21,11 +26,16 @@ jobs:
 
       - name: Install dependencies
         run: |
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install requests beautifulsoup4; fi
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            pip install requests beautifulsoup4
+          fi
 
       - name: Run monitor script
         env:
           PUSHOVER_USER_KEY: ${{ secrets.PUSHOVER_USER_KEY }}
           PUSHOVER_APP_TOKEN: ${{ secrets.PUSHOVER_APP_TOKEN }}
           WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
+
         run: python pdf_monitor.py
