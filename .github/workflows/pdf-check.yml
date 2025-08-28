@@ -1,0 +1,32 @@
+name: PDF Monitor
+
+on:
+  schedule:
+    # GitHub uses UTC time
+    # Summer (CEST): 07:30–16:00 in Prague = 05:30–14:00 UTC
+    - cron: "*/5 5-14 * * 1-5"
+    # Winter (CET): 07:30–16:00 in Prague = 06:30–15:00 UTC
+    - cron: "*/5 6-15 * * 1-5"
+  workflow_dispatch: # allow manual run
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run monitor script
+        env:
+          PUSHOVER_USER_KEY: ${{ secrets.PUSHOVER_USER_KEY }}
+          PUSHOVER_APP_TOKEN: ${{ secrets.PUSHOVER_APP_TOKEN }}
+        run: python pdf_monitor.py
