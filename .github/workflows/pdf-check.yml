@@ -1,8 +1,7 @@
 name: PDF Monitor
 
 on:
-  schedule:
-    - cron: "* * * * *"   # every minute (UTC)
+  
     
   workflow_dispatch: {}   # allows manual run from the Actions tab
 
